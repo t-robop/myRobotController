@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     long startTime=0;			// スタートした時の時間
     long stopTime=0;			// ストップした時の時間
-    long startStopTime =0;		// スタートとストップの差の時間
+    long start_stop_time =0;		// スタートとストップの差の時間
     long time=0;				// 現在のクロノメータータイムとstartstopTimeの差
 
 
@@ -230,8 +230,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                     flag=true;											// flagを有効にする
 
                 }else if(flag & startFlag){			// 2回目以降にボタンが押された時
-                    startStopTime =stopTime-startTime;	// スタートとストップの時間の差を計算
-                    time=SystemClock.elapsedRealtime()- startStopTime;	// スタートから上の差を引いた数を計算
+                    start_stop_time =stopTime-startTime;	// スタートとストップの時間の差を計算
+                    time=SystemClock.elapsedRealtime()- start_stop_time;	// スタートから上の差を引いた数を計算
                     chronometer.setBase(time);	// セットする
                     startTime=time;				// timeをスタートする時間に代入する
                     chronometer.start();		// クロノメーターをスタート
