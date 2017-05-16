@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="org.t_robop.y_ogawara.ev3control.MainActivity">
+    android:paddingTop="@dimen/activity_vertical_margin">
 
     <LinearLayout
         android:orientation="vertical"
@@ -15,10 +13,47 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialog_root">
+
+            <Chronometer
+                android:id="@+id/chronometer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="40sp"
+                android:layout_weight="8"
+                android:text="@string/chronometer_format"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="105dp">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:id="@+id/timerStart"
+                android:text="スタート"
+                android:layout_marginLeft="10dp"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timerstop"
+                android:text="ストップ"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timerClear"
+                android:text="クリア"
+                />
+
 
         </LinearLayout>
 
@@ -27,32 +62,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center|bottom"
+            android:paddingTop="30dp"
             android:layout_weight="1">
 
             <Button
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:text="接続"
-                android:textSize="25dp"
+                android:text="↑"
                 android:onClick="btn"
-                android:layout_marginRight="10dp"
-                android:id="@+id/connect" />
-
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:text="前進"
-                android:onClick="btn"
-                android:textSize="25dp"
+                android:textSize="70sp"
                 android:id="@+id/front"
-                android:background="@drawable/color_move" />
+                android:background="@drawable/color_move"
+                />
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginLeft="10dp"
-                android:id="@+id/test" />
         </LinearLayout>
 
         <LinearLayout
@@ -65,9 +87,10 @@
             <Button
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:text="左回転"
+                android:text="←"
                 android:onClick="btn"
-                android:textSize="25dp"
+                android:textSize="70sp"
+                android:gravity="center_horizontal"
                 android:id="@+id/left"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/color_move" />
@@ -75,7 +98,7 @@
             <Button
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:text="停止"
+                android:text="STOP"
                 android:textSize="25dp"
 
                 android:onClick="btn"
@@ -85,8 +108,9 @@
             <Button
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:text="右回転"
-                android:textSize="25dp"
+                android:text="→"
+                android:gravity="center_horizontal"
+                android:textSize="70sp"
                 android:layout_marginLeft="10dp"
                 android:onClick="btn"
                 android:id="@+id/right"
@@ -104,8 +128,8 @@
             <Button
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:text="後退"
-                android:textSize="25dp"
+                android:text="↓"
+                android:textSize="70sp"
                 android:onClick="btn"
                 android:id="@+id/back"
                 android:background="@drawable/color_move" />
