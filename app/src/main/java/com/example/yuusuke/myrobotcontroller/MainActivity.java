@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     EditText editName;
     NCMBObject obj;
 
-    long startTime=0;			// スタートした時の時間
+    long startTime=0;			// スタートした時の時間 
     long stopTime=0;			// ストップした時の時間
     long start_stop_time =0;		// スタートとストップの差の時間
     long time=0;				// 現在のクロノメータータイムとstartstopTimeの差
