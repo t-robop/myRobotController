@@ -13,7 +13,7 @@ public class robotSettingActivity extends AppCompatActivity {
 
 
     SharedPreferences pref;
-    SharedPreferences.Editor editor;
+
 
     // 前進の時
     EditText frontLeft;
@@ -34,7 +34,6 @@ public class robotSettingActivity extends AppCompatActivity {
         association();
 
 
-
     }
     // xmlと関連付けしたいものをまとめた
     void association(){
@@ -47,6 +46,31 @@ public class robotSettingActivity extends AppCompatActivity {
 
         rotationLeft = (EditText)findViewById(R.id.editText5);
         rotationRight = (EditText)findViewById(R.id.editText6);
+
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        // 保存ファイル名とmodeを指定 今回だと data という名前で、 このアプリ以外アクセスが出来ない設定
+        pref = getSharedPreferences("data",MODE_PRIVATE);
+
+        // 値を取得
+        String frontLeftStr = pref.getString("frontLeft","0");
+        String frontRightStr = pref.getString("frontRight","0");
+        String backLeftStr = pref.getString("backLeft","0");
+        String backRightStr = pref.getString("backRight","0");
+        String rotationLeftStr = pref.getString("rotationLeft","0");
+        String rotationRightStr = pref.getString("rotationRight","0");
+
+        // editTextに文字列を貼り付け
+        frontLeft.setText(frontLeftStr);
+        frontRight.setText(frontRightStr);
+        backLeft.setText(backLeftStr);
+        backRight.setText(backRightStr);
+        rotationLeft.setText(rotationLeftStr);
+        rotationRight.setText(rotationRightStr);
+
+
 
     }
     public void save(View v){
@@ -74,8 +98,7 @@ public class robotSettingActivity extends AppCompatActivity {
         }
         // 保存して良い時
         else{
-            // 保存ファイル名とmodeを指定 今回だと data という名前で、 このアプリ以外アクセスが出来ない設定
-            pref = getSharedPreferences("data",MODE_PRIVATE);
+            SharedPreferences.Editor editor;
             // SharedPreferencesに書くときに使う Editor の使用準備
             editor = pref.edit();
             // 書き込みデータを指定 key と 書き込みたいデータ

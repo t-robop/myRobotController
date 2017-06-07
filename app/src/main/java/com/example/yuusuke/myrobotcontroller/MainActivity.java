@@ -2,6 +2,7 @@ package com.example.yuusuke.myrobotcontroller;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,18 +10,33 @@ import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 import android.bluetooth.BluetoothAdapter;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP.BluetoothConnectionListener;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP.OnDataReceivedListener;
 public class MainActivity extends AppCompatActivity {
 
     BluetoothSPP bt;
+
+    // 速度の値が入る変数
+    // 前進の時
+    String frontLeftStr;
+    String frontRightStr;
+    // 後退の時
+    String backLeftStr;
+    String backRightStr;
+    // 回転の時
+    String rotationLeftStr;
+    String rotationRightStr;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         bt.stopService();
     }
 
+    @Override
     public void onStart() {
         super.onStart();
         if (!bt.isBluetoothEnabled()) {
@@ -114,6 +131,26 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    @Override
+    public void onResume(){
+        super.onResume();
+        SharedPreferences pref;
+        SharedPreferences.Editor editor;
+        // 保存ファイル名とmodeを指定 今回だと data という名前で、 このアプリ以外アクセスが出来ない設定
+        pref = getSharedPreferences("data",MODE_PRIVATE);
+        // SharedPreferencesに書くときに使う Editor の使用準備
+        editor = pref.edit();
+
+        // 値を取得
+        frontLeftStr = pref.getString("frontLeft","0");
+        frontRightStr = pref.getString("frontRight","0");
+        backLeftStr = pref.getString("backLeft","0");
+        backRightStr = pref.getString("backRight","0");
+        rotationLeftStr = pref.getString("rotationLeft","0");
+        rotationRightStr = pref.getString("rotationRight","0");
+    }
+
+
 
     public void setup() {
 //        Button btnSend = (Button)findViewById(R.id.btnSend);
