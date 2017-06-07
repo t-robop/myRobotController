@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
         //Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         //20ミリセックバイブする
         //vibrator.vibrate(50);
+
         switch (view.getId()){
             //前進するとき
             case R.id.front:
