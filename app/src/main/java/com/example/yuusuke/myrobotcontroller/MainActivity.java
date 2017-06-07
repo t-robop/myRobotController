@@ -9,6 +9,9 @@ import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 import android.bluetooth.BluetoothAdapter;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -69,6 +72,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.menu_settings:
+                Log.d("test", "Settings Selected.");
+                Intent intent = new Intent(this,robotSettingActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.menu_help:
+                Log.d("test", "Help selected.");
+                break;
+        }
+        return true;
+    }
+
+
 
     public void onDestroy() {
         super.onDestroy();
@@ -145,4 +171,5 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
 }
