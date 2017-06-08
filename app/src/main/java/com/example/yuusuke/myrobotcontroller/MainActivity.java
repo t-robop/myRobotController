@@ -187,23 +187,23 @@ public class MainActivity extends AppCompatActivity {
         switch (view.getId()){
             //前進するとき
             case R.id.front:
-                bt.send("0001", false);
+                bt.send("0001"+frontLeftStr+frontRightStr, false);
                 break;
             //止まるとき
             case R.id.stop:
-                bt.send("0005", false);
+                bt.send("0005"+"000"+"000", false);
                 break;
             //左回転するとき
             case R.id.left:
-                bt.send("0003", false);
+                bt.send("0003"+rotationLeftStr+rotationRightStr, false);
                 break;
             //右回転するとき
             case R.id.right:
-                bt.send("0004", false);
+                bt.send("0004"+rotationLeftStr+rotationRightStr, false);
                 break;
             //後ろに行くとき
             case R.id.back:
-                bt.send("0002", false);
+                bt.send("0002"+backLeftStr+backRightStr, false);
                 break;
 
 
