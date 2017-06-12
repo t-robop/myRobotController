@@ -142,12 +142,12 @@ public class MainActivity extends AppCompatActivity {
         editor = pref.edit();
 
         // 値を取得
-        frontLeftStr = pref.getString("frontLeft","0");
-        frontRightStr = pref.getString("frontRight","0");
-        backLeftStr = pref.getString("backLeft","0");
-        backRightStr = pref.getString("backRight","0");
-        rotationLeftStr = pref.getString("rotationLeft","0");
-        rotationRightStr = pref.getString("rotationRight","0");
+        frontLeftStr = pref.getString("frontLeft","000");
+        frontRightStr = pref.getString("frontRight","000");
+        backLeftStr = pref.getString("backLeft","000");
+        backRightStr = pref.getString("backRight","000");
+        rotationLeftStr = pref.getString("rotationLeft","000");
+        rotationRightStr = pref.getString("rotationRight","000");
     }
 
 

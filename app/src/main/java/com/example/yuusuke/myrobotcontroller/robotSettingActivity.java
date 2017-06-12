@@ -102,12 +102,12 @@ public class robotSettingActivity extends AppCompatActivity {
             // SharedPreferencesに書くときに使う Editor の使用準備
             editor = pref.edit();
             // 書き込みデータを指定 key と 書き込みたいデータ
-            editor.putString("frontLeft",frontLeft.getText().toString());
-            editor.putString("frontRight",frontRight.getText().toString());
-            editor.putString("backLeft",backLeft.getText().toString());
-            editor.putString("backRight",backRight.getText().toString());
-            editor.putString("rotationLeft",rotationLeft.getText().toString());
-            editor.putString("rotationRight",rotationRight.getText().toString());
+            editor.putString("frontLeft",textShap(frontLeft));
+            editor.putString("frontRight",textShap(frontRight));
+            editor.putString("backLeft",textShap(backLeft));
+            editor.putString("backRight",textShap(backRight));
+            editor.putString("rotationLeft",textShap(rotationLeft));
+            editor.putString("rotationRight",textShap(rotationRight));
             // これをしないと書き込まれないので注意
             editor.apply();
         }
@@ -129,6 +129,17 @@ public class robotSettingActivity extends AppCompatActivity {
         }
         // falseを返す
         return false;
+    }
+    // editTextに入っている数字を3桁に整形する
+    String textShap(EditText editText){
+        // ここでeditTextの数字で、0が先頭にあったら削除している
+        String num = Integer.valueOf(editText.getText().toString()).toString();
+        if (num.length() == 1){
+            num = "0"+"0"+num;
+        }else if (num.length() == 2){
+            num = "0"+num;
+        }
+        return num;
     }
 
 
