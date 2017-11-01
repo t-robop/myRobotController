@@ -110,6 +110,8 @@ public class robotSettingActivity extends AppCompatActivity {
             editor.putString("rotationRight",textShap(rotationRight));
             // これをしないと書き込まれないので注意
             editor.apply();
+
+            Toast.makeText(this, "保存しました", Toast.LENGTH_SHORT).show();
         }
 
 
