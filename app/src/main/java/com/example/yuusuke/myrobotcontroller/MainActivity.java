@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             public void onDeviceDisconnected() {
+                bt.stopService();
                 Toast.makeText(getApplicationContext()
                         , "接続が切れました", Toast.LENGTH_SHORT).show();
             }
@@ -124,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
             if(!bt.isServiceAvailable()) {
                 bt.setupService();
                 bt.startService(BluetoothState.DEVICE_OTHER);
-                setup();
             }
         }
     }
@@ -132,30 +132,16 @@ public class MainActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         SharedPreferences pref;
-        SharedPreferences.Editor editor;
         // 保存ファイル名とmodeを指定 今回だと data という名前で、 このアプリ以外アクセスが出来ない設定
         pref = getSharedPreferences("data",MODE_PRIVATE);
-        // SharedPreferencesに書くときに使う Editor の使用準備
-        editor = pref.edit();
 
         // 値を取得
-        frontLeftStr = pref.getString("frontLeft","000");
-        frontRightStr = pref.getString("frontRight","000");
-        backLeftStr = pref.getString("backLeft","000");
-        backRightStr = pref.getString("backRight","000");
-        rotationLeftStr = pref.getString("rotationLeft","000");
-        rotationRightStr = pref.getString("rotationRight","000");
-    }
-
-
-
-    public void setup() {
-//        Button btnSend = (Button)findViewById(R.id.btnSend);
-//        btnSend.setOnClickListener(new OnClickListener(){
-//            public void onClick(View v){
-//                bt.send("0001", true);
-//            }
-//        });
+        frontLeftStr = pref.getString("frontLeft","100");
+        frontRightStr = pref.getString("frontRight","100");
+        backLeftStr = pref.getString("backLeft","100");
+        backRightStr = pref.getString("backRight","100");
+        rotationLeftStr = pref.getString("rotationLeft","100");
+        rotationRightStr = pref.getString("rotationRight","100");
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -166,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK) {
                 bt.setupService();
                 bt.startService(BluetoothState.DEVICE_OTHER);
-                //setup();
             } else {
                 Toast.makeText(getApplicationContext()
                         , "Bluetooth was not enabled."

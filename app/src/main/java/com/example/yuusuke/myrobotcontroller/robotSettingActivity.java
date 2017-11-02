@@ -13,8 +13,6 @@ public class robotSettingActivity extends AppCompatActivity {
 
 
     SharedPreferences pref;
-
-
     // 前進の時
     EditText frontLeft;
     EditText frontRight;
@@ -25,16 +23,14 @@ public class robotSettingActivity extends AppCompatActivity {
     EditText rotationLeft;
     EditText rotationRight;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_robot_setting);
         // メソッド呼び出し
         association();
-
-
     }
+
     // xmlと関連付けしたいものをまとめた
     void association(){
         //xmlとの関連付け
@@ -46,21 +42,19 @@ public class robotSettingActivity extends AppCompatActivity {
 
         rotationLeft = (EditText)findViewById(R.id.editText5);
         rotationRight = (EditText)findViewById(R.id.editText6);
-
     }
     @Override
     public void onResume(){
         super.onResume();
         // 保存ファイル名とmodeを指定 今回だと data という名前で、 このアプリ以外アクセスが出来ない設定
         pref = getSharedPreferences("data",MODE_PRIVATE);
-
         // 値を取得
-        String frontLeftStr = pref.getString("frontLeft","0");
-        String frontRightStr = pref.getString("frontRight","0");
-        String backLeftStr = pref.getString("backLeft","0");
-        String backRightStr = pref.getString("backRight","0");
-        String rotationLeftStr = pref.getString("rotationLeft","0");
-        String rotationRightStr = pref.getString("rotationRight","0");
+        String frontLeftStr = pref.getString("frontLeft","100");
+        String frontRightStr = pref.getString("frontRight","100");
+        String backLeftStr = pref.getString("backLeft","100");
+        String backRightStr = pref.getString("backRight","100");
+        String rotationLeftStr = pref.getString("rotationLeft","100");
+        String rotationRightStr = pref.getString("rotationRight","100");
 
         // editTextに文字列を貼り付け
         frontLeft.setText(frontLeftStr);
@@ -69,10 +63,8 @@ public class robotSettingActivity extends AppCompatActivity {
         backRight.setText(backRightStr);
         rotationLeft.setText(rotationLeftStr);
         rotationRight.setText(rotationRightStr);
-
-
-
     }
+
     public void save(View v){
         String errorText = null;
         if (!errorCheck(frontLeft.getText().toString())){
@@ -110,13 +102,9 @@ public class robotSettingActivity extends AppCompatActivity {
             editor.putString("rotationRight",textShap(rotationRight));
             // これをしないと書き込まれないので注意
             editor.apply();
-
             Toast.makeText(this, "保存しました", Toast.LENGTH_SHORT).show();
             finish();
         }
-
-
-
     }
 
     boolean errorCheck(String numStr){
@@ -133,6 +121,7 @@ public class robotSettingActivity extends AppCompatActivity {
         // falseを返す
         return false;
     }
+
     // editTextに入っている数字を3桁に整形する
     String textShap(EditText editText){
         // ここでeditTextの数字で、0が先頭にあったら削除している
@@ -144,7 +133,4 @@ public class robotSettingActivity extends AppCompatActivity {
         }
         return num;
     }
-
-
-
 }
