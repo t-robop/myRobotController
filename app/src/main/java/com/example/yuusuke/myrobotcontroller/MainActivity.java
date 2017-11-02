@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(!bt.isBluetoothAvailable()) {
             Toast.makeText(getApplicationContext()
-                    , "Bluetooth is not available"
+                    , "BluetoothがONじゃないよ！！"
                     , Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -97,18 +97,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.menu_settings:
-                Log.d("test", "Settings Selected.");
                 Intent intent = new Intent(this,robotSettingActivity.class);
                 startActivity(intent);
-                break;
-            case R.id.menu_help:
-                Log.d("test", "Help selected.");
                 break;
         }
         return true;
     }
-
-
 
     public void onDestroy() {
         super.onDestroy();
@@ -154,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 bt.startService(BluetoothState.DEVICE_OTHER);
             } else {
                 Toast.makeText(getApplicationContext()
-                        , "Bluetooth was not enabled."
+                        , "BluetoothがONじゃないよ！！"
                         , Toast.LENGTH_SHORT).show();
                 finish();
             }
