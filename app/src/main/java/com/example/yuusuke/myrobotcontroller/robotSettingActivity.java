@@ -112,6 +112,7 @@ public class robotSettingActivity extends AppCompatActivity {
             editor.apply();
 
             Toast.makeText(this, "保存しました", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
 
