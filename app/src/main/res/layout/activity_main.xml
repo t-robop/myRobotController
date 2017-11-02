@@ -20,15 +20,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center|bottom"
-            android:layout_weight="1">
-
             <Button
                 android:layout_width="100dp"
                 android:layout_height="100dp"
@@ -38,12 +29,28 @@
                 android:layout_marginRight="10dp"
                 android:id="@+id/connect" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|bottom"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/test1" />
+
             <Button
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:text="前進"
+                android:text="↑"
                 android:onClick="btn"
-                android:textSize="25dp"
+                android:textSize="70dp"
                 android:id="@+id/front"
                 android:background="@drawable/color_move" />
 
@@ -65,9 +72,9 @@
             <Button
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:text="左回転"
+                android:text="←"
                 android:onClick="btn"
-                android:textSize="25dp"
+                android:textSize="70dp"
                 android:id="@+id/left"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/color_move" />
@@ -75,7 +82,7 @@
             <Button
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:text="停止"
+                android:text="STOP"
                 android:textSize="25dp"
 
                 android:onClick="btn"
@@ -85,8 +92,8 @@
             <Button
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:text="右回転"
-                android:textSize="25dp"
+                android:text="→"
+                android:textSize="70dp"
                 android:layout_marginLeft="10dp"
                 android:onClick="btn"
                 android:id="@+id/right"
@@ -104,8 +111,8 @@
             <Button
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:text="後退"
-                android:textSize="25dp"
+                android:text="↓"
+                android:textSize="70dp"
                 android:onClick="btn"
                 android:id="@+id/back"
                 android:background="@drawable/color_move" />
