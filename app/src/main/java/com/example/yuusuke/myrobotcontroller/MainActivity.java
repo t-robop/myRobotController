@@ -2,6 +2,7 @@ package com.example.yuusuke.myrobotcontroller;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
@@ -28,6 +29,16 @@ public class MainActivity extends AppCompatActivity{
     TextView textView;
     EditText editName;
 
+    // 速度の値が入る変数
+    // 前進の時
+    String frontLeftStr;
+    String frontRightStr;
+    // 後退の時
+    String backLeftStr;
+    String backRightStr;
+    // 回転の時
+    String rotationLeftStr;
+    String rotationRightStr;
 
     //たまビュー
     ImageView tamaV;
@@ -85,6 +96,22 @@ public class MainActivity extends AppCompatActivity{
             }
         });
         tamaSetup();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        SharedPreferences pref;
+        // 保存ファイル名とmodeを指定 今回だと data という名前で、 このアプリ以外アクセスが出来ない設定
+        pref = getSharedPreferences("data",MODE_PRIVATE);
+
+        // 値を取得
+        frontLeftStr = pref.getString("frontLeft","100");
+        frontRightStr = pref.getString("frontRight","100");
+        backLeftStr = pref.getString("backLeft","100");
+        backRightStr = pref.getString("backRight","100");
+        rotationLeftStr = pref.getString("rotationLeft","100");
+        rotationRightStr = pref.getString("rotationRight","100");
     }
 
     // メニュー作成
@@ -202,9 +229,9 @@ public class MainActivity extends AppCompatActivity{
                         //右回転
                         if (dx > 450) {
                             dx = 450;
-                            if(!tamaRightFlag) {
-                                bt.send("0004", false);
-                            }
+                            //if(!tamaRightFlag) {
+                                bt.send("0004"+rotationLeftStr+rotationRightStr, false);
+                            //}
                             tamaRightFlag =true;
                         }
                         else{
@@ -213,9 +240,9 @@ public class MainActivity extends AppCompatActivity{
                         //左回転
                         if (dx < 250) {
                             dx = 250;
-                            if(!tamaLeftFlag){
-                                bt.send("0003", false);
-                            }
+                            //if(!tamaLeftFlag){
+                                bt.send("0003"+rotationLeftStr+rotationRightStr, false);
+                            //}
                             tamaLeftFlag = true;
                         }
                         else{
@@ -224,9 +251,9 @@ public class MainActivity extends AppCompatActivity{
                         //前進
                         if (dy < 0) {
                             dy = 0;
-                            if(!tamaFrontFlag){
-                                bt.send("0001", false);
-                            }
+                            //if(!tamaFrontFlag){
+                                bt.send("0001"+frontLeftStr+frontRightStr, false);
+                            //}
                             tamaFrontFlag = true;
                         }
                         else{
@@ -235,9 +262,9 @@ public class MainActivity extends AppCompatActivity{
                         //後進
                         if (dy > 200) {
                             dy = 200;
-                            if (!tamaBackFlag){
-                                bt.send("0002", false);
-                            }
+                            //if (!tamaBackFlag){
+                                bt.send("0002"+backLeftStr+backRightStr, false);
+                            //}
                             tamaBackFlag = true;
                         }
                         else{
@@ -252,7 +279,7 @@ public class MainActivity extends AppCompatActivity{
                     //指が離れた時
                     case MotionEvent.ACTION_UP:
                         tamaV.layout(350, 80, 350+tamaV.getWidth(), 80+tamaV.getHeight());
-                        bt.send("0005", false);
+                        bt.send("0005"+"000"+"000", false);
                         break;
                 }
 
