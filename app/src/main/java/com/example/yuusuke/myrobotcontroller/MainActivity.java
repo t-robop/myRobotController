@@ -15,11 +15,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,59 +33,30 @@ import com.nifty.cloud.mb.core.NCMBObject;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP.BluetoothConnectionListener;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP.OnDataReceivedListener;
 
-public class MainActivity extends AppCompatActivity implements OnClickListener {
+public class MainActivity extends AppCompatActivity{
     BluetoothSPP bt = null;  //bluetooth
-    Chronometer chronometer;
-    Button startButton;
-    Button stopButton;
-    Button clearButton;
-    AlertDialog alertDialog;
     View inputView;  //Dialogレイアウトの取得用変数
     TextView textView;
     EditText editName;
-    NCMBObject obj;
-
-    long startTime=0;			// スタートした時の時間
-    long stopTime=0;			// ストップした時の時間
-    long start_stop_time =0;		// スタートとストップの差の時間
-    long time=0;				// 現在のクロノメータータイムとstartstopTimeの差
 
 
-    // 状態の判断材料
-    boolean flag=false; 		// trueにすると起動すぐに内部でカウント開始されてしまう
-    boolean startFlag=true;		// スタートボタンの状態
-    boolean stopFlag=false;		// ストップボタンの状態
+    //たまビュー
+    ImageView tamaV;
+    private int preDx, preDy, newDx, newDy;
+
+    int defX,defY;
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        chronometer=(Chronometer)findViewById(R.id.chronometer);
-        chronometer.setOnClickListener(this);
-
-        startButton = (Button)findViewById(R.id.timerStart);
-        startButton.setOnClickListener(this);
-
-        stopButton = (Button)findViewById(R.id.timerstop);
-        stopButton.setOnClickListener(this);
-
-        clearButton = (Button)findViewById(R.id.timerClear);
-        clearButton.setOnClickListener(this);
-
+        tamaV = (ImageView) findViewById(R.id.tama);
         //Dialogレイアウト呼び出し
         LayoutInflater inflater = LayoutInflater.from(this);
         inputView = inflater.inflate(R.layout.result_dialog,null);
 
         textView = (TextView)inputView.findViewById(R.id.text);
         editName = (EditText)inputView.findViewById(R.id.editText);
-
-        setDialog();  //Dialogの設定
-
-        //mBaas初期化
-        NCMB.initialize(this.getApplicationContext(),"33c9c7da896342f619f12945a88d3f02d600a05bd22e222bc1d1280512e806b1"
-                ,"eda878b816c799a03e098cd20db19e1e4453e4f2f9e45cae90a0655717a6a4e2");
-
 
         bt = new BluetoothSPP(this);
 
@@ -117,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                         , "接続できません", Toast.LENGTH_SHORT).show();
             }
         });
+        tamaSetup();
     }
 
     // メニュー作成
@@ -131,18 +105,23 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.connectTest:
+            case R.id.item_setting:
                 // 接続ボタンの処理
-
-                if(bt.getServiceState() == BluetoothState.STATE_CONNECTED) {
-                    bt.disconnect();
-                } else {
-                    Intent intent = new Intent(getApplicationContext(), DeviceList.class);
-                    startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
-                }
+                Intent intent = new Intent(this,robotSettingActivity.class);
+                startActivity(intent);
                 break;
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void connect(View v){
+        if(bt.getServiceState() == BluetoothState.STATE_CONNECTED) {
+            bt.disconnect();
+        } else {
+            Intent intent = new Intent(getApplicationContext(), DeviceList.class);
+            startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
+        }
     }
 
     public void onDestroy() {
@@ -159,19 +138,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             if(!bt.isServiceAvailable()) {
                 bt.setupService();
                 bt.startService(BluetoothState.DEVICE_OTHER);
-                setup();
             }
         }
     }
 
-    public void setup() {
-//        Button btnSend = (Button)findViewById(R.id.btnSend);
-//        btnSend.setOnClickListener(new OnClickListener(){
-//            public void onClick(View v){
-//                bt.send("0001", true);
-//            }
-//        });
-    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
@@ -181,7 +151,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             if(resultCode == Activity.RESULT_OK) {
                 bt.setupService();
                 bt.startService(BluetoothState.DEVICE_OTHER);
-                //setup();
             } else {
                 Toast.makeText(getApplicationContext()
                         , "Bluetooth was not enabled."
@@ -191,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         }
     }
 
-    public void btn(View view) {
+    /*public void btn(View view) {
 
         switch (view.getId()){
             //前進するとき
@@ -215,105 +184,67 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 bt.send("0002", false);
                 break;
         }
-    }
+    }*/
 
+    void tamaSetup(){
+        preDx = preDy = newDx = newDy = 0;
+        defX=tamaV.getWidth();
+        defY=tamaV.getHeight();
+        tamaV.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // x,y 位置取得
+                newDx = (int) event.getRawX();
+                newDy = (int) event.getRawY();
 
-    @Override
-    public void onClick(View view) {
-        switch(view.getId()){
-            // スタートボタンを押した時(2パターン)
-            case R.id.timerStart:
-                if(!flag & startFlag){		// 最初にボタンが押された時
-                    chronometer.setBase(SystemClock.elapsedRealtime());	// 0にする
-                    chronometer.start();								// クロノメーターをスタート
-                    startTime=SystemClock.elapsedRealtime();			// スタート時間(計算時に必要)
-                    flag=true;											// flagを有効にする
+                switch (event.getAction()) {
+                    // タッチダウンでdragされた
+                    case MotionEvent.ACTION_MOVE:
+                        // ACTION_MOVEでの位置
+                        int dx = tamaV.getLeft() + (newDx - preDx);
+                        int dy = tamaV.getTop() + (newDy - preDy);
 
-                }else if(flag & startFlag){			// 2回目以降にボタンが押された時
-                    start_stop_time =stopTime-startTime;	// スタートとストップの時間の差を計算
-                    time=SystemClock.elapsedRealtime()- start_stop_time;	// スタートから上の差を引いた数を計算
-                    chronometer.setBase(time);	// セットする
-                    startTime=time;				// timeをスタートする時間に代入する
-                    chronometer.start();		// クロノメーターをスタート
-                }
-
-                startFlag=false;									// startFlagを無効にする
-                stopFlag=true;										// stopFlagを有効にする
-
-                break;
-
-            // ストップボタンを押した時
-            case R.id.timerstop:
-                if(stopFlag){
-                    chronometer.stop();						// クロノメーターをストップ
-                    stopTime=SystemClock.elapsedRealtime();	// ストップした時間を取得
-                    startFlag=true;							// startFlagを有効にする
-                    stopFlag=false;							// stopFlagを有効にする
-
-                    alertDialog.setMessage(chronometer.getText().toString());
-
-                    // ダイアログ表示
-                    alertDialog.show();
-                }
-                break;
-
-            // クリアボタンを押した時
-            case R.id.timerClear:
-                chronometer.stop();						// クロノメーターをストップ
-                chronometer.setBase(SystemClock.elapsedRealtime());	// 0にする
-                flag=false;								// フラグを無効にする
-                startFlag=true;							// startFlagを有効にする
-                stopFlag=true;							// stopFlagを有効にする
-                break;
-        }
-    }
-
-    public void setDialog(){
-        if(alertDialog == null) {
-            alertDialog = new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("結果")
-                    .setView(inputView)
-                    .setPositiveButton(
-                            "ランキング登録",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    // ランキング登録 ボタンクリック処理
-                                    Toast.makeText(MainActivity.this, "アップロードしました", Toast.LENGTH_SHORT).show();
-
-                                    //Cloudにデータ送信
-
-                                    //保存するインスタンスを作成
-                                    obj = new NCMBObject("GameScore");
-
-                                    //値を設定
-                                    obj.put("Name", editName.getText().toString());
-                                    obj.put("Time", chronometer.getText().toString());
-
-                                    //保存を実施
-                                    obj.saveInBackground(new DoneCallback() {
-                                        @Override
-                                        public void done(NCMBException e) {
-                                            if (e != null) {
-                                                //保存が失敗した場合の処理
-                                                Log.d("NCMB", "保存に失敗しました。エラー:" + e.getMessage());
-                                            } else {
-                                                //保存が成功した場合の処理
-                                                Log.d("NCMB", "保存に成功しました。");
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                    )
-
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
+                        // 画像の位置を設定する
+                        //右回転
+                        if (dx > 450) {
+                            dx = 450;
+                            bt.send("0004", false);
                         }
-                    })
-                    .create();
-        }
+                        //左回転
+                        else if (dx < 250) {
+                            dx = 250;
+                            bt.send("0003", false);
+                        }
+                        //前進
+                        if (dy < 0) {
+                            dy = 0;
+                            bt.send("0001", false);
+                        }
+                        //後進
+                        else if (dy > 200) {
+                            dy = 200;
+                            bt.send("0002", false);
+                        }
+                        tamaV.layout(dx, dy, dx + tamaV.getWidth(), dy + tamaV.getHeight());
+
+                        Log.d("onTouch", "ACTION_MOVE: dx=" + dx + ", dy=" + dy + "," + newDx + "," + newDy);
+
+                        break;
+
+                    //指が離れた時
+                    case MotionEvent.ACTION_UP:
+                        tamaV.layout(350, 80, 350+tamaV.getWidth(), 80+tamaV.getHeight());
+                        bt.send("0005", false);
+                        break;
+                }
+
+                // タッチした位置を古い位置とする
+                preDx = newDx;
+                preDy = newDy;
+
+                return true;
+            }
+        });
+
     }
 }
