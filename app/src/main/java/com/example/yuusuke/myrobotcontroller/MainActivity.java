@@ -1,10 +1,7 @@
 package com.example.yuusuke.myrobotcontroller;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.SystemClock;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
@@ -17,18 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.nifty.cloud.mb.core.DoneCallback;
-import com.nifty.cloud.mb.core.NCMB;
-import com.nifty.cloud.mb.core.NCMBException;
-import com.nifty.cloud.mb.core.NCMBObject;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP.BluetoothConnectionListener;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP.OnDataReceivedListener;
@@ -45,6 +34,11 @@ public class MainActivity extends AppCompatActivity{
     private int preDx, preDy, newDx, newDy;
 
     int defX,defY;
+
+    boolean tamaFrontFlag =false;
+    boolean tamaBackFlag =false;
+    boolean tamaLeftFlag =false;
+    boolean tamaRightFlag =false;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -208,22 +202,46 @@ public class MainActivity extends AppCompatActivity{
                         //右回転
                         if (dx > 450) {
                             dx = 450;
-                            bt.send("0004", false);
+                            if(!tamaRightFlag) {
+                                bt.send("0004", false);
+                            }
+                            tamaRightFlag =true;
+                        }
+                        else{
+                            tamaRightFlag =false;
                         }
                         //左回転
-                        else if (dx < 250) {
+                        if (dx < 250) {
                             dx = 250;
-                            bt.send("0003", false);
+                            if(!tamaLeftFlag){
+                                bt.send("0003", false);
+                            }
+                            tamaLeftFlag = true;
+                        }
+                        else{
+                            tamaLeftFlag = false;
                         }
                         //前進
                         if (dy < 0) {
                             dy = 0;
-                            bt.send("0001", false);
+                            if(!tamaFrontFlag){
+                                bt.send("0001", false);
+                            }
+                            tamaFrontFlag = true;
+                        }
+                        else{
+                            tamaFrontFlag = false;
                         }
                         //後進
-                        else if (dy > 200) {
+                        if (dy > 200) {
                             dy = 200;
-                            bt.send("0002", false);
+                            if (!tamaBackFlag){
+                                bt.send("0002", false);
+                            }
+                            tamaBackFlag = true;
+                        }
+                        else{
+                            tamaBackFlag = false;
                         }
                         tamaV.layout(dx, dy, dx + tamaV.getWidth(), dy + tamaV.getHeight());
 
