@@ -8,7 +8,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.yuusuke.myrobotcontroller.MainActivity"
-    android:background="#444444">
+    android:background="#444444"
+    android:id="@+id/content_layout">
 
     <LinearLayout
         android:orientation="vertical"
@@ -35,11 +36,13 @@
         </LinearLayout>
 
         <FrameLayout
+            android:id="@+id/frame_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
             <ImageView
+                android:id="@+id/back_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"

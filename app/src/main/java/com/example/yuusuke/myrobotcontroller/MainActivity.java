@@ -3,6 +3,7 @@ package com.example.yuusuke.myrobotcontroller;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
@@ -10,13 +11,17 @@ import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 import android.bluetooth.BluetoothAdapter;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +55,10 @@ public class MainActivity extends AppCompatActivity{
     boolean tamaBackFlag =false;
     boolean tamaLeftFlag =false;
     boolean tamaRightFlag =false;
+
+    int VIEW_HEIGHT;
+    int VIEW_WIDTH;
+    FrameLayout fL;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -96,6 +105,9 @@ public class MainActivity extends AppCompatActivity{
             }
         });
         tamaSetup();
+
+        fL=(FrameLayout) findViewById(R.id.frame_layout);
+
     }
 
     @Override
@@ -218,6 +230,9 @@ public class MainActivity extends AppCompatActivity{
                 newDx = (int) event.getRawX();
                 newDy = (int) event.getRawY();
 
+                VIEW_HEIGHT =fL.getHeight()+tamaV.getHeight();
+                VIEW_WIDTH =fL.getWidth()+tamaV.getWidth();
+
                 switch (event.getAction()) {
                     // タッチダウンでdragされた
                     case MotionEvent.ACTION_MOVE:
@@ -278,7 +293,11 @@ public class MainActivity extends AppCompatActivity{
 
                     //指が離れた時
                     case MotionEvent.ACTION_UP:
-                        tamaV.layout(350, 80, 350+tamaV.getWidth(), 80+tamaV.getHeight());
+                        //tamaV.layout(350, 80, 350+tamaV.getWidth(), 80+tamaV.getHeight());
+                        tamaV.layout((VIEW_WIDTH /2)-tamaV.getWidth(), (VIEW_HEIGHT /2)-tamaV.getHeight(),VIEW_WIDTH /2, VIEW_HEIGHT /2);
+                        //tamaV.layout(0, 0, 0+tamaV.getWidth(), 0+tamaV.getHeight());
+                        Log.d("AAAA",String.valueOf(VIEW_WIDTH/2)+","+String.valueOf(VIEW_HEIGHT/2));
+                        Log.d("AAAA",String.valueOf((VIEW_WIDTH /2)-tamaV.getWidth())+","+String.valueOf((VIEW_HEIGHT /2)-tamaV.getHeight()));
                         bt.send("0005"+"000"+"000", false);
                         break;
                 }
