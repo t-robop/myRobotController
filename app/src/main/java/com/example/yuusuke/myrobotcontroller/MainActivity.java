@@ -242,8 +242,8 @@ public class MainActivity extends AppCompatActivity{
 
                         // 画像の位置を設定する
                         //右回転
-                        if (dx > 450) {
-                            dx = 450;
+                        if (dx > (VIEW_WIDTH /2)-tamaV.getWidth()/2) {
+                            dx = (VIEW_WIDTH /2)-tamaV.getWidth()/2;
                             //if(!tamaRightFlag) {
                                 bt.send("0004"+rotationLeftStr+rotationRightStr, false);
                             //}
@@ -253,8 +253,8 @@ public class MainActivity extends AppCompatActivity{
                             tamaRightFlag =false;
                         }
                         //左回転
-                        if (dx < 250) {
-                            dx = 250;
+                        if (dx < (VIEW_WIDTH /2)-tamaV.getWidth()-tamaV.getWidth()/2) {
+                            dx = (VIEW_WIDTH /2)-tamaV.getWidth()-tamaV.getWidth()/2;
                             //if(!tamaLeftFlag){
                                 bt.send("0003"+rotationLeftStr+rotationRightStr, false);
                             //}
@@ -264,8 +264,8 @@ public class MainActivity extends AppCompatActivity{
                             tamaLeftFlag = false;
                         }
                         //前進
-                        if (dy < 0) {
-                            dy = 0;
+                        if (dy < (VIEW_HEIGHT /2)-tamaV.getHeight()-tamaV.getHeight()/2) {
+                            dy = (VIEW_HEIGHT /2)-tamaV.getHeight()-tamaV.getHeight()/2;
                             //if(!tamaFrontFlag){
                                 bt.send("0001"+frontLeftStr+frontRightStr, false);
                             //}
@@ -275,8 +275,8 @@ public class MainActivity extends AppCompatActivity{
                             tamaFrontFlag = false;
                         }
                         //後進
-                        if (dy > 200) {
-                            dy = 200;
+                        if (dy > (VIEW_HEIGHT /2)-tamaV.getHeight()/2) {
+                            dy = (VIEW_HEIGHT /2)-tamaV.getHeight()/2;
                             //if (!tamaBackFlag){
                                 bt.send("0002"+backLeftStr+backRightStr, false);
                             //}
@@ -294,6 +294,7 @@ public class MainActivity extends AppCompatActivity{
                     //指が離れた時
                     case MotionEvent.ACTION_UP:
                         //tamaV.layout(350, 80, 350+tamaV.getWidth(), 80+tamaV.getHeight());
+                        //中心は（VIEW_WIDTH /2, VIEW_HEIGHT /2）である
                         tamaV.layout((VIEW_WIDTH /2)-tamaV.getWidth(), (VIEW_HEIGHT /2)-tamaV.getHeight(),VIEW_WIDTH /2, VIEW_HEIGHT /2);
                         //tamaV.layout(0, 0, 0+tamaV.getWidth(), 0+tamaV.getHeight());
                         Log.d("AAAA",String.valueOf(VIEW_WIDTH/2)+","+String.valueOf(VIEW_HEIGHT/2));
