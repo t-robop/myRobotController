@@ -137,24 +137,25 @@ public class MainActivity extends AppCompatActivity{
     // メニューアイテム選択イベント
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.item_setting:
-                // 接続ボタンの処理
-                Intent intent = new Intent(this,robotSettingActivity.class);
+                // 設定
+                intent = new Intent(this,robotSettingActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.item_connect:
+                //接続
+                if(bt.getServiceState() == BluetoothState.STATE_CONNECTED) {
+                    bt.disconnect();
+                } else {
+                    intent = new Intent(getApplicationContext(), DeviceList.class);
+                    startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
+                }
                 break;
 
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void connect(View v){
-        if(bt.getServiceState() == BluetoothState.STATE_CONNECTED) {
-            bt.disconnect();
-        } else {
-            Intent intent = new Intent(getApplicationContext(), DeviceList.class);
-            startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
-        }
     }
 
     public void onDestroy() {
