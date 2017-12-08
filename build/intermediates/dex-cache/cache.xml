@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/home/daipc/StudioProjects/myRobotController/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="2164efb4170225fbf626088865770dece8e7e374">
+        <dex dex="/home/daipc/StudioProjects/myRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_f74572d99e6574302b8f6a0de190ec3f9345744b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/StudioProjects/myRobotController/app/libs/NCMB.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="0eff967bd8c46e9065287d0b46e33c9ea231336c">
+        <dex dex="/home/daipc/StudioProjects/myRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/2/NCMB_3353125bd0a54bba2c35b0b6ea27ea64cdf2d06d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/StudioProjects/myRobotController/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="caff8e51a24901cfc9cd7e1cf83d84f4cb0c103b">
+        <dex dex="/home/daipc/StudioProjects/myRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_1b69d1df292cd8b15c3c41751c09544bcb5cb869/classes.dex" />
+    </item>
+
+</items>
