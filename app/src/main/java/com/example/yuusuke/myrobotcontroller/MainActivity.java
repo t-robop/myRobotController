@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity{
     boolean tamaLeftFlag =false;
     boolean tamaRightFlag =false;
 
+    boolean rotateMode = true;  //true : その場で回転  false : 片方のタイヤを軸に回転
+
     int VIEW_HEIGHT;
     int VIEW_WIDTH;
     FrameLayout fL;
@@ -154,6 +156,15 @@ public class MainActivity extends AppCompatActivity{
                 }
                 break;
 
+            case R.id.rotateMode:
+                if(rotateMode){
+                    Toast.makeText(this, "片方軸回転モード", Toast.LENGTH_SHORT).show();
+                    rotateMode = false;
+                }else{
+                    Toast.makeText(this, "中心軸回転モード", Toast.LENGTH_SHORT).show();
+                    rotateMode = true;
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -245,9 +256,11 @@ public class MainActivity extends AppCompatActivity{
                         //右回転
                         if (dx > (VIEW_WIDTH /2)-tamaV.getWidth()/2) {
                             dx = (VIEW_WIDTH /2)-tamaV.getWidth()/2;
-                            //if(!tamaRightFlag) {
+                            if(rotateMode) {
                                 bt.send("0004"+rotationLeftStr+rotationRightStr, false);
-                            //}
+                            }else{
+                                bt.send("0007"+rotationLeftStr+rotationRightStr, false);
+                            }
                             tamaRightFlag =true;
                         }
                         else{
@@ -256,9 +269,11 @@ public class MainActivity extends AppCompatActivity{
                         //左回転
                         if (dx < (VIEW_WIDTH /2)-tamaV.getWidth()-tamaV.getWidth()/2) {
                             dx = (VIEW_WIDTH /2)-tamaV.getWidth()-tamaV.getWidth()/2;
-                            //if(!tamaLeftFlag){
+                            if(rotateMode){
                                 bt.send("0003"+rotationLeftStr+rotationRightStr, false);
-                            //}
+                            }else{
+                                bt.send("0006"+rotationLeftStr+rotationRightStr, false);
+                            }
                             tamaLeftFlag = true;
                         }
                         else{
