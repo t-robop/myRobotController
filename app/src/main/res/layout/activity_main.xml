@@ -7,7 +7,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="org.t_robop.y_ogawara.ev3control.MainActivity">
+    tools:context="com.example.yuusuke.myrobotcontroller.MainActivity"
+    android:background="#444444"
+    android:id="@+id/content_layout">
 
     <LinearLayout
         android:orientation="vertical"
@@ -18,104 +20,33 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="4">
 
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:text="接続"
-                android:textSize="25dp"
-                android:onClick="btn"
-                android:layout_marginRight="10dp"
-                android:id="@+id/connect" />
 
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <FrameLayout
+            android:id="@+id/frame_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center|bottom"
             android:layout_weight="1">
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginLeft="10dp"
-                android:id="@+id/test1" />
+            <ImageView
+                android:id="@+id/back_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:src="@drawable/naibu"/>
 
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:text="↑"
-                android:onClick="btn"
-                android:textSize="70dp"
-                android:id="@+id/front"
-                android:background="@drawable/color_move" />
+            <ImageView
+                android:id="@+id/tama"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:src="@drawable/tama"/>
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginLeft="10dp"
-                android:id="@+id/test" />
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_weight="1">
 
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:text="←"
-                android:onClick="btn"
-                android:textSize="70dp"
-                android:id="@+id/left"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/color_move" />
-
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:text="STOP"
-                android:textSize="25dp"
-
-                android:onClick="btn"
-                android:id="@+id/stop"
-                android:background="@drawable/color_move" />
-
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:text="→"
-                android:textSize="70dp"
-                android:layout_marginLeft="10dp"
-                android:onClick="btn"
-                android:id="@+id/right"
-                android:background="@drawable/color_move" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center|top"
-            android:layout_weight="1">
-
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:text="↓"
-                android:textSize="70dp"
-                android:onClick="btn"
-                android:id="@+id/back"
-                android:background="@drawable/color_move" />
-        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
