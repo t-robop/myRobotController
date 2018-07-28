@@ -193,22 +193,22 @@ public class MainActivity extends AppCompatActivity {
                         //右回転
                         if (dx > (VIEW_WIDTH / 2) - tamaV.getWidth() / 2) {
                             dx = (VIEW_WIDTH / 2) - tamaV.getWidth() / 2;
-                            bluetoothSPP.send("0004" + rotationLeftStr + rotationRightStr, false);
+                            bluetoothSPP.send("4" + rotationLeftStr + rotationRightStr, false);
                         }
                         //左回転
                         if (dx < (VIEW_WIDTH / 2) - tamaV.getWidth() - tamaV.getWidth() / 2) {
                             dx = (VIEW_WIDTH / 2) - tamaV.getWidth() - tamaV.getWidth() / 2;
-                            bluetoothSPP.send("0003" + rotationLeftStr + rotationRightStr, false);
+                            bluetoothSPP.send("3" + rotationLeftStr + rotationRightStr, false);
                         }
                         //前進
                         if (dy < (VIEW_HEIGHT / 2) - tamaV.getHeight() - tamaV.getHeight() / 2) {
                             dy = (VIEW_HEIGHT / 2) - tamaV.getHeight() - tamaV.getHeight() / 2;
-                            bluetoothSPP.send("0001" + frontLeftStr + frontRightStr, false);
+                            bluetoothSPP.send("1" + frontLeftStr + frontRightStr, false);
                         }
                         //後進
                         if (dy > (VIEW_HEIGHT / 2) - tamaV.getHeight() / 2) {
                             dy = (VIEW_HEIGHT / 2) - tamaV.getHeight() / 2;
-                            bluetoothSPP.send("0002" + backLeftStr + backRightStr, false);
+                            bluetoothSPP.send("2" + backLeftStr + backRightStr, false);
                         }
                         tamaV.layout(dx, dy, dx + tamaV.getWidth(), dy + tamaV.getHeight());
 
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_UP:
                         //中心は（VIEW_WIDTH /2, VIEW_HEIGHT /2）である
                         tamaV.layout((VIEW_WIDTH / 2) - tamaV.getWidth(), (VIEW_HEIGHT / 2) - tamaV.getHeight(), VIEW_WIDTH / 2, VIEW_HEIGHT / 2);
-                        bluetoothSPP.send("0005" + "000" + "000", false);
+                        bluetoothSPP.send("5" + "000" + "000", false);
                         break;
                 }
 
