@@ -1,34 +1,31 @@
 package com.example.yuusuke.myrobotcontroller;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Point;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import app.akexorcist.bluetotohspp.library.BluetoothSPP;
-import app.akexorcist.bluetotohspp.library.BluetoothState;
-import app.akexorcist.bluetotohspp.library.DeviceList;
-import android.bluetooth.BluetoothAdapter;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP.BluetoothConnectionListener;
 import app.akexorcist.bluetotohspp.library.BluetoothSPP.OnDataReceivedListener;
+import app.akexorcist.bluetotohspp.library.BluetoothState;
+import app.akexorcist.bluetotohspp.library.DeviceList;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     BluetoothSPP bt = null;  //bluetooth
     View inputView;  //Dialogレイアウトの取得用変数
     TextView textView;
@@ -49,12 +46,12 @@ public class MainActivity extends AppCompatActivity{
     ImageView tamaV;
     private int preDx, preDy, newDx, newDy;
 
-    int defX,defY;
+    int defX, defY;
 
-    boolean tamaFrontFlag =false;
-    boolean tamaBackFlag =false;
-    boolean tamaLeftFlag =false;
-    boolean tamaRightFlag =false;
+    boolean tamaFrontFlag = false;
+    boolean tamaBackFlag = false;
+    boolean tamaLeftFlag = false;
+    boolean tamaRightFlag = false;
 
     int VIEW_HEIGHT;
     int VIEW_WIDTH;
@@ -67,14 +64,14 @@ public class MainActivity extends AppCompatActivity{
         tamaV = (ImageView) findViewById(R.id.tama);
         //Dialogレイアウト呼び出し
         LayoutInflater inflater = LayoutInflater.from(this);
-        inputView = inflater.inflate(R.layout.result_dialog,null);
+        inputView = inflater.inflate(R.layout.result_dialog, null);
 
-        textView = (TextView)inputView.findViewById(R.id.text);
-        editName = (EditText)inputView.findViewById(R.id.editText);
+        textView = (TextView) inputView.findViewById(R.id.text);
+        editName = (EditText) inputView.findViewById(R.id.editText);
 
         bt = new BluetoothSPP(this);
 
-        if(!bt.isBluetoothAvailable()) {
+        if (!bt.isBluetoothAvailable()) {
             Toast.makeText(getApplicationContext()
                     , "Bluetooth is not available"
                     , Toast.LENGTH_SHORT).show();
@@ -106,24 +103,24 @@ public class MainActivity extends AppCompatActivity{
         });
         tamaSetup();
 
-        fL=(FrameLayout) findViewById(R.id.frame_layout);
+        fL = (FrameLayout) findViewById(R.id.frame_layout);
 
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         SharedPreferences pref;
         // 保存ファイル名とmodeを指定 今回だと data という名前で、 このアプリ以外アクセスが出来ない設定
-        pref = getSharedPreferences("data",MODE_PRIVATE);
+        pref = getSharedPreferences("data", MODE_PRIVATE);
 
         // 値を取得
-        frontLeftStr = pref.getString("frontLeft","100");
-        frontRightStr = pref.getString("frontRight","100");
-        backLeftStr = pref.getString("backLeft","100");
-        backRightStr = pref.getString("backRight","100");
-        rotationLeftStr = pref.getString("rotationLeft","100");
-        rotationRightStr = pref.getString("rotationRight","100");
+        frontLeftStr = pref.getString("frontLeft", "100");
+        frontRightStr = pref.getString("frontRight", "100");
+        backLeftStr = pref.getString("backLeft", "100");
+        backRightStr = pref.getString("backRight", "100");
+        rotationLeftStr = pref.getString("rotationLeft", "100");
+        rotationRightStr = pref.getString("rotationRight", "100");
     }
 
     // メニュー作成
@@ -141,12 +138,12 @@ public class MainActivity extends AppCompatActivity{
         switch (item.getItemId()) {
             case R.id.item_setting:
                 // 設定
-                intent = new Intent(this,robotSettingActivity.class);
+                intent = new Intent(this, robotSettingActivity.class);
                 startActivity(intent);
                 break;
             case R.id.item_connect:
                 //接続
-                if(bt.getServiceState() == BluetoothState.STATE_CONNECTED) {
+                if (bt.getServiceState() == BluetoothState.STATE_CONNECTED) {
                     bt.disconnect();
                 } else {
                     intent = new Intent(getApplicationContext(), DeviceList.class);
@@ -169,7 +166,7 @@ public class MainActivity extends AppCompatActivity{
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, BluetoothState.REQUEST_ENABLE_BT);
         } else {
-            if(!bt.isServiceAvailable()) {
+            if (!bt.isServiceAvailable()) {
                 bt.setupService();
                 bt.startService(BluetoothState.DEVICE_OTHER);
             }
@@ -178,11 +175,11 @@ public class MainActivity extends AppCompatActivity{
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
-            if(resultCode == Activity.RESULT_OK)
+        if (requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
+            if (resultCode == Activity.RESULT_OK)
                 bt.connect(data);
-        } else if(requestCode == BluetoothState.REQUEST_ENABLE_BT) {
-            if(resultCode == Activity.RESULT_OK) {
+        } else if (requestCode == BluetoothState.REQUEST_ENABLE_BT) {
+            if (resultCode == Activity.RESULT_OK) {
                 bt.setupService();
                 bt.startService(BluetoothState.DEVICE_OTHER);
             } else {
@@ -194,36 +191,11 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    /*public void btn(View view) {
-
-        switch (view.getId()){
-            //前進するとき
-            case R.id.front:
-                bt.send("0001", false);
-                break;
-            //止まるとき
-            case R.id.stop:
-                bt.send("0005", false);
-                break;
-            //左回転するとき
-            case R.id.left:
-                bt.send("0003", false);
-                break;
-            //右回転するとき
-            case R.id.right:
-                bt.send("0004", false);
-                break;
-            //後ろに行くとき
-            case R.id.back:
-                bt.send("0002", false);
-                break;
-        }
-    }*/
-
-    void tamaSetup(){
+    @SuppressLint("ClickableViewAccessibility")
+    void tamaSetup() {
         preDx = preDy = newDx = newDy = 0;
-        defX=tamaV.getWidth();
-        defY=tamaV.getHeight();
+        defX = tamaV.getWidth();
+        defY = tamaV.getHeight();
         tamaV.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -231,8 +203,8 @@ public class MainActivity extends AppCompatActivity{
                 newDx = (int) event.getRawX();
                 newDy = (int) event.getRawY();
 
-                VIEW_HEIGHT =fL.getHeight()+tamaV.getHeight();
-                VIEW_WIDTH =fL.getWidth()+tamaV.getWidth();
+                VIEW_HEIGHT = fL.getHeight() + tamaV.getHeight();
+                VIEW_WIDTH = fL.getWidth() + tamaV.getWidth();
 
                 switch (event.getAction()) {
                     // タッチダウンでdragされた
@@ -243,47 +215,35 @@ public class MainActivity extends AppCompatActivity{
 
                         // 画像の位置を設定する
                         //右回転
-                        if (dx > (VIEW_WIDTH /2)-tamaV.getWidth()/2) {
-                            dx = (VIEW_WIDTH /2)-tamaV.getWidth()/2;
-                            //if(!tamaRightFlag) {
-                                bt.send("0004"+rotationLeftStr+rotationRightStr, false);
-                            //}
-                            tamaRightFlag =true;
-                        }
-                        else{
-                            tamaRightFlag =false;
+                        if (dx > (VIEW_WIDTH / 2) - tamaV.getWidth() / 2) {
+                            dx = (VIEW_WIDTH / 2) - tamaV.getWidth() / 2;
+                            bt.send("0004" + rotationLeftStr + rotationRightStr, false);
+                            tamaRightFlag = true;
+                        } else {
+                            tamaRightFlag = false;
                         }
                         //左回転
-                        if (dx < (VIEW_WIDTH /2)-tamaV.getWidth()-tamaV.getWidth()/2) {
-                            dx = (VIEW_WIDTH /2)-tamaV.getWidth()-tamaV.getWidth()/2;
-                            //if(!tamaLeftFlag){
-                                bt.send("0003"+rotationLeftStr+rotationRightStr, false);
-                            //}
+                        if (dx < (VIEW_WIDTH / 2) - tamaV.getWidth() - tamaV.getWidth() / 2) {
+                            dx = (VIEW_WIDTH / 2) - tamaV.getWidth() - tamaV.getWidth() / 2;
+                            bt.send("0003" + rotationLeftStr + rotationRightStr, false);
                             tamaLeftFlag = true;
-                        }
-                        else{
+                        } else {
                             tamaLeftFlag = false;
                         }
                         //前進
-                        if (dy < (VIEW_HEIGHT /2)-tamaV.getHeight()-tamaV.getHeight()/2) {
-                            dy = (VIEW_HEIGHT /2)-tamaV.getHeight()-tamaV.getHeight()/2;
-                            //if(!tamaFrontFlag){
-                                bt.send("0001"+frontLeftStr+frontRightStr, false);
-                            //}
+                        if (dy < (VIEW_HEIGHT / 2) - tamaV.getHeight() - tamaV.getHeight() / 2) {
+                            dy = (VIEW_HEIGHT / 2) - tamaV.getHeight() - tamaV.getHeight() / 2;
+                            bt.send("0001" + frontLeftStr + frontRightStr, false);
                             tamaFrontFlag = true;
-                        }
-                        else{
+                        } else {
                             tamaFrontFlag = false;
                         }
                         //後進
-                        if (dy > (VIEW_HEIGHT /2)-tamaV.getHeight()/2) {
-                            dy = (VIEW_HEIGHT /2)-tamaV.getHeight()/2;
-                            //if (!tamaBackFlag){
-                                bt.send("0002"+backLeftStr+backRightStr, false);
-                            //}
+                        if (dy > (VIEW_HEIGHT / 2) - tamaV.getHeight() / 2) {
+                            dy = (VIEW_HEIGHT / 2) - tamaV.getHeight() / 2;
+                            bt.send("0002" + backLeftStr + backRightStr, false);
                             tamaBackFlag = true;
-                        }
-                        else{
+                        } else {
                             tamaBackFlag = false;
                         }
                         tamaV.layout(dx, dy, dx + tamaV.getWidth(), dy + tamaV.getHeight());
@@ -294,13 +254,11 @@ public class MainActivity extends AppCompatActivity{
 
                     //指が離れた時
                     case MotionEvent.ACTION_UP:
-                        //tamaV.layout(350, 80, 350+tamaV.getWidth(), 80+tamaV.getHeight());
                         //中心は（VIEW_WIDTH /2, VIEW_HEIGHT /2）である
-                        tamaV.layout((VIEW_WIDTH /2)-tamaV.getWidth(), (VIEW_HEIGHT /2)-tamaV.getHeight(),VIEW_WIDTH /2, VIEW_HEIGHT /2);
-                        //tamaV.layout(0, 0, 0+tamaV.getWidth(), 0+tamaV.getHeight());
-                        Log.d("AAAA",String.valueOf(VIEW_WIDTH/2)+","+String.valueOf(VIEW_HEIGHT/2));
-                        Log.d("AAAA",String.valueOf((VIEW_WIDTH /2)-tamaV.getWidth())+","+String.valueOf((VIEW_HEIGHT /2)-tamaV.getHeight()));
-                        bt.send("0005"+"000"+"000", false);
+                        tamaV.layout((VIEW_WIDTH / 2) - tamaV.getWidth(), (VIEW_HEIGHT / 2) - tamaV.getHeight(), VIEW_WIDTH / 2, VIEW_HEIGHT / 2);
+                        Log.d("AAAA", String.valueOf(VIEW_WIDTH / 2) + "," + String.valueOf(VIEW_HEIGHT / 2));
+                        Log.d("AAAA", String.valueOf((VIEW_WIDTH / 2) - tamaV.getWidth()) + "," + String.valueOf((VIEW_HEIGHT / 2) - tamaV.getHeight()));
+                        bt.send("0005" + "000" + "000", false);
                         break;
                 }
 
