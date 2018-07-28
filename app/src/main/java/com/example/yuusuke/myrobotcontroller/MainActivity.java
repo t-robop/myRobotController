@@ -8,15 +8,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
@@ -26,65 +23,45 @@ import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 
 public class MainActivity extends AppCompatActivity {
-    BluetoothSPP bt = null;  //bluetooth
-    View inputView;  //Dialogレイアウトの取得用変数
-    TextView textView;
-    EditText editName;
+    private BluetoothSPP bluetoothSPP = null;  //bluetooth
 
     // 速度の値が入る変数
     // 前進の時
-    String frontLeftStr;
-    String frontRightStr;
+    private String frontLeftStr, frontRightStr;
     // 後退の時
-    String backLeftStr;
-    String backRightStr;
+    private String backLeftStr, backRightStr;
     // 回転の時
-    String rotationLeftStr;
-    String rotationRightStr;
+    private String rotationLeftStr, rotationRightStr;
 
     //たまビュー
-    ImageView tamaV;
+    private ImageView tamaV;
     private int preDx, preDy, newDx, newDy;
 
-    int defX, defY;
-
-    boolean tamaFrontFlag = false;
-    boolean tamaBackFlag = false;
-    boolean tamaLeftFlag = false;
-    boolean tamaRightFlag = false;
-
-    int VIEW_HEIGHT;
-    int VIEW_WIDTH;
-    FrameLayout fL;
+    private int VIEW_HEIGHT, VIEW_WIDTH;
+    private FrameLayout frameLayout;
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tamaV = (ImageView) findViewById(R.id.tama);
-        //Dialogレイアウト呼び出し
-        LayoutInflater inflater = LayoutInflater.from(this);
-        inputView = inflater.inflate(R.layout.result_dialog, null);
 
-        textView = (TextView) inputView.findViewById(R.id.text);
-        editName = (EditText) inputView.findViewById(R.id.editText);
+        bluetoothSPP = new BluetoothSPP(this);
 
-        bt = new BluetoothSPP(this);
-
-        if (!bt.isBluetoothAvailable()) {
+        if (!bluetoothSPP.isBluetoothAvailable()) {
             Toast.makeText(getApplicationContext()
                     , "Bluetooth is not available"
                     , Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        bt.setOnDataReceivedListener(new OnDataReceivedListener() {
+        bluetoothSPP.setOnDataReceivedListener(new OnDataReceivedListener() {
             public void onDataReceived(byte[] data, String message) {
                 Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
 
-        bt.setBluetoothConnectionListener(new BluetoothConnectionListener() {
+        bluetoothSPP.setBluetoothConnectionListener(new BluetoothConnectionListener() {
             public void onDeviceConnected(String name, String address) {
                 Toast.makeText(getApplicationContext()
                         , "接続 to " + name + "\n" + address
@@ -103,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         });
         tamaSetup();
 
-        fL = (FrameLayout) findViewById(R.id.frame_layout);
+        frameLayout = (FrameLayout) findViewById(R.id.frame_layout);
 
     }
 
@@ -143,8 +120,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.item_connect:
                 //接続
-                if (bt.getServiceState() == BluetoothState.STATE_CONNECTED) {
-                    bt.disconnect();
+                if (bluetoothSPP.getServiceState() == BluetoothState.STATE_CONNECTED) {
+                    bluetoothSPP.disconnect();
                 } else {
                     intent = new Intent(getApplicationContext(), DeviceList.class);
                     startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
@@ -157,18 +134,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void onDestroy() {
         super.onDestroy();
-        bt.stopService();
+        bluetoothSPP.stopService();
     }
 
     public void onStart() {
         super.onStart();
-        if (!bt.isBluetoothEnabled()) {
+        if (!bluetoothSPP.isBluetoothEnabled()) {
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, BluetoothState.REQUEST_ENABLE_BT);
         } else {
-            if (!bt.isServiceAvailable()) {
-                bt.setupService();
-                bt.startService(BluetoothState.DEVICE_OTHER);
+            if (!bluetoothSPP.isServiceAvailable()) {
+                bluetoothSPP.setupService();
+                bluetoothSPP.startService(BluetoothState.DEVICE_OTHER);
             }
         }
     }
@@ -177,11 +154,11 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
             if (resultCode == Activity.RESULT_OK)
-                bt.connect(data);
+                bluetoothSPP.connect(data);
         } else if (requestCode == BluetoothState.REQUEST_ENABLE_BT) {
             if (resultCode == Activity.RESULT_OK) {
-                bt.setupService();
-                bt.startService(BluetoothState.DEVICE_OTHER);
+                bluetoothSPP.setupService();
+                bluetoothSPP.startService(BluetoothState.DEVICE_OTHER);
             } else {
                 Toast.makeText(getApplicationContext()
                         , "Bluetooth was not enabled."
@@ -194,8 +171,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("ClickableViewAccessibility")
     void tamaSetup() {
         preDx = preDy = newDx = newDy = 0;
-        defX = tamaV.getWidth();
-        defY = tamaV.getHeight();
+
         tamaV.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -203,8 +179,8 @@ public class MainActivity extends AppCompatActivity {
                 newDx = (int) event.getRawX();
                 newDy = (int) event.getRawY();
 
-                VIEW_HEIGHT = fL.getHeight() + tamaV.getHeight();
-                VIEW_WIDTH = fL.getWidth() + tamaV.getWidth();
+                VIEW_HEIGHT = frameLayout.getHeight() + tamaV.getHeight();
+                VIEW_WIDTH = frameLayout.getWidth() + tamaV.getWidth();
 
                 switch (event.getAction()) {
                     // タッチダウンでdragされた
@@ -217,34 +193,22 @@ public class MainActivity extends AppCompatActivity {
                         //右回転
                         if (dx > (VIEW_WIDTH / 2) - tamaV.getWidth() / 2) {
                             dx = (VIEW_WIDTH / 2) - tamaV.getWidth() / 2;
-                            bt.send("0004" + rotationLeftStr + rotationRightStr, false);
-                            tamaRightFlag = true;
-                        } else {
-                            tamaRightFlag = false;
+                            bluetoothSPP.send("0004" + rotationLeftStr + rotationRightStr, false);
                         }
                         //左回転
                         if (dx < (VIEW_WIDTH / 2) - tamaV.getWidth() - tamaV.getWidth() / 2) {
                             dx = (VIEW_WIDTH / 2) - tamaV.getWidth() - tamaV.getWidth() / 2;
-                            bt.send("0003" + rotationLeftStr + rotationRightStr, false);
-                            tamaLeftFlag = true;
-                        } else {
-                            tamaLeftFlag = false;
+                            bluetoothSPP.send("0003" + rotationLeftStr + rotationRightStr, false);
                         }
                         //前進
                         if (dy < (VIEW_HEIGHT / 2) - tamaV.getHeight() - tamaV.getHeight() / 2) {
                             dy = (VIEW_HEIGHT / 2) - tamaV.getHeight() - tamaV.getHeight() / 2;
-                            bt.send("0001" + frontLeftStr + frontRightStr, false);
-                            tamaFrontFlag = true;
-                        } else {
-                            tamaFrontFlag = false;
+                            bluetoothSPP.send("0001" + frontLeftStr + frontRightStr, false);
                         }
                         //後進
                         if (dy > (VIEW_HEIGHT / 2) - tamaV.getHeight() / 2) {
                             dy = (VIEW_HEIGHT / 2) - tamaV.getHeight() / 2;
-                            bt.send("0002" + backLeftStr + backRightStr, false);
-                            tamaBackFlag = true;
-                        } else {
-                            tamaBackFlag = false;
+                            bluetoothSPP.send("0002" + backLeftStr + backRightStr, false);
                         }
                         tamaV.layout(dx, dy, dx + tamaV.getWidth(), dy + tamaV.getHeight());
 
@@ -256,9 +220,7 @@ public class MainActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_UP:
                         //中心は（VIEW_WIDTH /2, VIEW_HEIGHT /2）である
                         tamaV.layout((VIEW_WIDTH / 2) - tamaV.getWidth(), (VIEW_HEIGHT / 2) - tamaV.getHeight(), VIEW_WIDTH / 2, VIEW_HEIGHT / 2);
-                        Log.d("AAAA", String.valueOf(VIEW_WIDTH / 2) + "," + String.valueOf(VIEW_HEIGHT / 2));
-                        Log.d("AAAA", String.valueOf((VIEW_WIDTH / 2) - tamaV.getWidth()) + "," + String.valueOf((VIEW_HEIGHT / 2) - tamaV.getHeight()));
-                        bt.send("0005" + "000" + "000", false);
+                        bluetoothSPP.send("0005" + "000" + "000", false);
                         break;
                 }
 

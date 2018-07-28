@@ -13,14 +13,11 @@ public class robotSettingActivity extends AppCompatActivity {
 
     SharedPreferences pref;
     // 前進の時
-    EditText frontLeft;
-    EditText frontRight;
+    EditText frontLeft, frontRight;
     // 後退の時
-    EditText backLeft;
-    EditText backRight;
+    EditText backLeft, backRight;
     // 回転の時
-    EditText rotationLeft;
-    EditText rotationRight;
+    EditText rotationLeft, rotationRight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
